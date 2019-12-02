@@ -10,21 +10,9 @@ import java.util.List;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-public class LitecartTests extends TestBase {
-
+public class MenuTests extends TestBase {
     private final String baseUrl = "http://localhost/litecart/";
     private final String adminPage = baseUrl + "admin/";
-
-
-    @Test
-    public void openAdminPageTest() {
-        driver.get(adminPage);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
-        wait.until(titleIs("Cwark Store"));
-
-    }
 
     @Test
     public void testLeftMenuItems() {
@@ -44,14 +32,14 @@ public class LitecartTests extends TestBase {
             WebElement li = driver.findElement(By.xpath("//span[text()='" + liName + "']/.."));
             li.click();
             wait.until(visibilityOfElementLocated(By.cssSelector("h1")));
-            List<WebElement> uls = driver.findElements(By.xpath("//ul[@class='docs']//span[@class='name']"));
+            List<WebElement> uls = driver.findElements(By.xpath("//ul[@class='docs']/li"));
             if (uls.size() > 0) {
                 List<String> ulNames = new ArrayList<String>();
                 for (WebElement ul : uls) {
-                    ulNames.add(ul.getText().trim());
+                    ulNames.add(ul.getAttribute("id").trim());
                 }
                 for (String ulName : ulNames) {
-                    WebElement ul = driver.findElement(By.xpath("//ul[@class='docs']//span[text()='" + ulName + "']/.."));
+                    WebElement ul = driver.findElement(By.xpath("//li[@id='" + ulName + "']/a"));
                     ul.click();
                     wait.until(visibilityOfElementLocated(By.cssSelector("h1")));
                 }
