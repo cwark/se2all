@@ -48,19 +48,19 @@ public class TovarsTests extends TestBase {
 
     }
 
-    private void checkPrice(WebElement regularPrice, WebElement compPrice){
+    private void checkPrice(WebElement regularPrice, WebElement compPrice) {
         //акционная цена крупнее, чем обычная
-        int regularFontSize = Integer.parseInt(regularPrice.getCssValue("font-size").substring(0,2));
-        int compFontSize = Integer.parseInt(compPrice.getCssValue("font-size").substring(0,2));
+        int regularFontSize = Integer.parseInt(regularPrice.getCssValue("font-size").substring(0, 2));
+        int compFontSize = Integer.parseInt(compPrice.getCssValue("font-size").substring(0, 2));
+
         Assert.assertTrue(regularFontSize < compFontSize);
 
         //акционная жирная
         int fontWeight = Integer.parseInt(compPrice.getCssValue("font-weight"));
-        Assert.assertEquals(fontWeight, 700);
+        Assert.assertTrue(fontWeight >= 700);
 
         //акционная красная
-        String rgba = compPrice.getCssValue("color");
-        String[] arrayColor = rgba.substring(5, rgba.length()-1).split(", ");
+        String[] arrayColor = getArrayColor(compPrice);
 
         Assert.assertTrue(Integer.parseInt(arrayColor[1]) == 0);
         Assert.assertTrue(Integer.parseInt(arrayColor[2]) == 0);
@@ -70,10 +70,13 @@ public class TovarsTests extends TestBase {
         Assert.assertTrue("line-through".equals(textDecor));
 
         //обычная цена серая
-        rgba = regularPrice.getCssValue("color");
-        arrayColor = rgba.substring(5, rgba.length()-1).split(", ");
-
+        arrayColor = getArrayColor(regularPrice);
         Assert.assertTrue(Integer.parseInt(arrayColor[0]) == Integer.parseInt(arrayColor[1]));
         Assert.assertTrue(Integer.parseInt(arrayColor[0]) == Integer.parseInt(arrayColor[2]));
+    }
+
+    private String[] getArrayColor(WebElement element){
+        String rgba = element.getCssValue("color");
+        return rgba.substring(rgba.indexOf("(") + 1, rgba.indexOf(")")).split(", ");
     }
 }

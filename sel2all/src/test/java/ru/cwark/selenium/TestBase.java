@@ -1,5 +1,6 @@
 package ru.cwark.selenium;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
@@ -17,7 +18,12 @@ public class TestBase {
 
     @Before
     public void start() {
+        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+        //driver = new FirefoxDriver();
+        //driver = new InternetExplorerDriver();
+
+
         wait = new WebDriverWait(driver, 20);
     }
 
