@@ -15,14 +15,15 @@ public class CountryTests extends TestBase {
     private final String adminPage = baseUrl + "admin/";
 
     @Test
-    public void testCountryAndZones() {
+    public void testCountryAndZones() throws InterruptedException {
         driver.get(adminPage);
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
         wait.until(titleIs("Cwark Store"));
-        //wait.until(elementSelectionStateToBe(By.xpath("//span[text()='Countries']/.."), true));
         wait.until(elementToBeClickable(By.xpath("//span[text()='Countries']/..")));
+
+        Thread.sleep(3000);
 
         driver.findElement(By.xpath("//span[text()='Countries']/..")).click();
         wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
@@ -39,7 +40,6 @@ public class CountryTests extends TestBase {
         }
 
         lis = driver.findElements(By.xpath("//table[@class='dataTable']//tr/td[6][.!='0']/../td[5]"));
-        System.out.println(lis.size());
         if (lis.size() > 0) {
             List<String> cNames = new ArrayList<>();
             for (WebElement element : lis) {
@@ -48,17 +48,16 @@ public class CountryTests extends TestBase {
 
             for (String name : cNames) {
                 driver.findElement(By.xpath("//td[.='" + name + "']/a")).click();
-                lis = driver.findElements(By.xpath("//table[@id='table-zones']//td/input[contains(@name, '[name]')]/.."));
+                lis = driver.findElements(By.xpath("//table[@id='table-zones']//td/input[contains(@name, '[name]')][@type='hidden']/.."));
                 for (int idx = 0; idx < lis.size() - 1; idx++) {
                     String t1 = lis.get(idx).getText().trim();
                     String t2 = lis.get(idx + 1).getText().trim();
 
-                    if (!t1.isEmpty() && !t2.isEmpty()) {
-                        System.out.println("t1: >" + t1 + "< t2: >" + t2 + "<");
-                        Assert.assertTrue(t1.compareToIgnoreCase(t2) <= 0);
-                    }
+                    Assert.assertTrue(t1.compareToIgnoreCase(t2) <= 0);
                 }
-                
+
+                Thread.sleep(3000);
+
                 driver.findElement(By.xpath("//button[@name='cancel']")).click();
                 wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
                 wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"),"Countries"));
