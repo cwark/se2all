@@ -27,7 +27,7 @@ public class CountryTests extends TestBase {
 
         driver.findElement(By.xpath("//span[text()='Countries']/..")).click();
         wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
-        wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"),"Countries"));
+        wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"), "Countries"));
         wait.until(visibilityOfElementLocated(By.cssSelector("li#app-.selected")));
 
         List<WebElement> lis = driver.findElements(By.xpath("//table[@class='dataTable']//tr/td[5]"));
@@ -60,10 +60,31 @@ public class CountryTests extends TestBase {
 
                 driver.findElement(By.xpath("//button[@name='cancel']")).click();
                 wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
-                wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"),"Countries"));
+                wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"), "Countries"));
             }
         }
+    }
 
+    @Test
+    public void testGeoZones() throws InterruptedException {
+        driver.get(adminPage);
+        driver.findElement(By.name("username")).sendKeys("admin");
+        driver.findElement(By.name("password")).sendKeys("admin");
+        driver.findElement(By.name("login")).click();
+        wait.until(titleIs("Cwark Store"));
+        wait.until(elementToBeClickable(By.xpath("//span[text()='Geo Zones']/..")));
 
+        Thread.sleep(3000);
+
+        driver.findElement(By.xpath("//span[text()='Geo Zones']/..")).click();
+
+        List<WebElement> lis = driver.findElements(By.xpath("//table[@class='dataTable']//tr/td[3]/a"));
+
+        for (int idx = 0; idx < lis.size() - 1; idx++) {
+            String t1 = lis.get(idx).getText().trim().toLowerCase();
+            String t2 = lis.get(idx + 1).getText().trim().toLowerCase();
+
+            Assert.assertTrue(t1.compareToIgnoreCase(t2) <= 0);
+        }
     }
 }
