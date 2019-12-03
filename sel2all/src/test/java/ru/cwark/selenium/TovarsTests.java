@@ -26,7 +26,7 @@ public class TovarsTests extends TestBase {
         String compPriceOnMainPage = compPrice.getText();
 
         //проверяем цвет на главной странице
-        checkPriceColor(regularPrice, compPrice);
+        checkPrice(regularPrice, compPrice);
 
         //переходим на страницу товара
         driver.findElement(By.xpath("//div[@id='box-campaigns']//li[1]//a[@class='link']")).click();
@@ -44,11 +44,11 @@ public class TovarsTests extends TestBase {
         Assert.assertEquals(compPriceOnMainPage, compPrice.getText());
 
         //проверяем цвет на странице товара
-        checkPriceColor(regularPrice, compPrice);
+        checkPrice(regularPrice, compPrice);
 
     }
 
-    private void checkPriceColor(WebElement regularPrice, WebElement compPrice){
+    private void checkPrice(WebElement regularPrice, WebElement compPrice){
         //акционная цена крупнее, чем обычная
         int regularFontSize = Integer.parseInt(regularPrice.getCssValue("font-size").substring(0,2));
         int compFontSize = Integer.parseInt(compPrice.getCssValue("font-size").substring(0,2));
