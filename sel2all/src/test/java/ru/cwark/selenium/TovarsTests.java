@@ -14,7 +14,7 @@ public class TovarsTests extends TestBase {
 
     @Test
     public void testTovarItems() {
-        driver.get(baseUrl);
+        get(baseUrl);
         wait.until(titleContains("Cwark Store"));
         wait.until(visibilityOfElementLocated(By.id("box-campaigns")));
 
@@ -29,7 +29,7 @@ public class TovarsTests extends TestBase {
         checkPrice(regularPrice, compPrice);
 
         //переходим на страницу товара
-        driver.findElement(By.xpath("//div[@id='box-campaigns']//li[1]//a[@class='link']")).click();
+        click(By.xpath("//div[@id='box-campaigns']//li[1]//a[@class='link']"));
         wait.until(visibilityOfElementLocated(By.xpath("//h1[@class='title']")));
 
         //а) на главной странице и на странице товара совпадает текст названия товара

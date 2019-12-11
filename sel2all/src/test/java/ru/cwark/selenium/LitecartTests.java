@@ -18,20 +18,20 @@ public class LitecartTests extends TestBase {
 
     @Test
     public void openAdminPageTest() {
-        driver.get(adminPage);
+        get(adminPage);
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
+        click(By.name("login"));
         wait.until(titleIs("Cwark Store"));
 
     }
 
     @Test
     public void testLeftMenuItems() {
-        driver.get(adminPage);
+        get(adminPage);
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
+        click(By.name("login"));
         wait.until(titleIs("Cwark Store"));
 
         List<WebElement> lis = driver.findElements(By.xpath("//li[@id='app-']/a/span[@class='name']"));

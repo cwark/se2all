@@ -15,7 +15,7 @@ public class StikersTests extends TestBase {
 
     @Test
     public void testStickerItems() {
-        driver.get(baseUrl);
+        get(baseUrl);
         wait.until(titleContains("Cwark Store"));
 
         List<WebElement> lis = driver.findElements(By.xpath("//div[@class='content']//li[contains(@class,'product')]"));

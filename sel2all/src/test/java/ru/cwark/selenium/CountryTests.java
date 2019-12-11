@@ -16,16 +16,16 @@ public class CountryTests extends TestBase {
 
     @Test
     public void testCountryAndZones() throws InterruptedException {
-        driver.get(adminPage);
+        get(adminPage);
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
+        click(By.name("login"));
         wait.until(titleIs("Cwark Store"));
         wait.until(elementToBeClickable(By.xpath("//span[text()='Countries']/..")));
 
         Thread.sleep(3000);
 
-        driver.findElement(By.xpath("//span[text()='Countries']/..")).click();
+        click(By.xpath("//span[text()='Countries']/.."));
         wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
         wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"), "Countries"));
         wait.until(visibilityOfElementLocated(By.cssSelector("li#app-.selected")));
@@ -47,7 +47,7 @@ public class CountryTests extends TestBase {
             }
 
             for (String name : cNames) {
-                driver.findElement(By.xpath("//td[.='" + name + "']/a")).click();
+                click(By.xpath("//td[.='" + name + "']/a"));
                 lis = driver.findElements(By.xpath("//table[@id='table-zones']//td/input[contains(@name, '[name]')][@type='hidden']/.."));
                 for (int idx = 0; idx < lis.size() - 1; idx++) {
                     String t1 = lis.get(idx).getText().trim();
@@ -58,7 +58,7 @@ public class CountryTests extends TestBase {
 
                 Thread.sleep(3000);
 
-                driver.findElement(By.xpath("//button[@name='cancel']")).click();
+                click(By.xpath("//button[@name='cancel']"));
                 wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
                 wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"), "Countries"));
             }
@@ -67,16 +67,16 @@ public class CountryTests extends TestBase {
 
     @Test
     public void testGeoZones() throws InterruptedException {
-        driver.get(adminPage);
+        get(adminPage);
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
+        click(By.name("login"));
         wait.until(titleIs("Cwark Store"));
         wait.until(elementToBeClickable(By.xpath("//span[text()='Geo Zones']/..")));
 
         Thread.sleep(3000);
 
-        driver.findElement(By.xpath("//span[text()='Geo Zones']/..")).click();
+        click(By.xpath("//span[text()='Geo Zones']/.."));
 
         List<WebElement> lis = driver.findElements(By.xpath("//table[@class='dataTable']//tr/td[3]/a"));
         List<String> gNames = new ArrayList<>();
@@ -84,7 +84,7 @@ public class CountryTests extends TestBase {
             gNames.add(gName.getText());
         }
         for (String gName : gNames) {
-            driver.findElement(By.xpath("//table[@class='dataTable']//tr/td[3]/a[.='" + gName + "']")).click();
+            click(By.xpath("//table[@class='dataTable']//tr/td[3]/a[.='" + gName + "']"));
 
             wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
             wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"), "Edit Geo Zone"));
@@ -100,7 +100,7 @@ public class CountryTests extends TestBase {
 
             Thread.sleep(3000);
 
-            driver.findElement(By.xpath("//button[@name='cancel']")).click();
+            click(By.xpath("//button[@name='cancel']"));
             wait.until(visibilityOfElementLocated(By.xpath("//td[@id='content']/h1")));
             wait.until(textToBePresentInElementLocated(By.xpath("//td[@id='content']/h1"), "Geo Zones"));
         }
