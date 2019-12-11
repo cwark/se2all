@@ -78,6 +78,7 @@ public class UserTests extends TestBase {
         click(By.xpath("//button[@name='login']"));
         wait.until(visibilityOfElementLocated(By.xpath("//div[@id='notices-wrapper']//div[@class='notice success']")));
         wait.until(visibilityOfElementLocated(By.xpath("//div[@id='box-account']//a[.='Logout']")));
+        wait.until(invisibilityOfElementLocated(By.xpath("//div[@id='notices-wrapper']//div[@class='notice success']")));
 
         click(By.xpath("//div[@id='box-account']//a[.='Logout']"));
         wait.until(visibilityOfElementLocated(By.xpath("//div[@id='notices-wrapper']//div[@class='notice success']")));
