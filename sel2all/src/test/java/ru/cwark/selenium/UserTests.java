@@ -10,7 +10,7 @@ public class UserTests extends TestBase {
 
     @Test
     public void testUserCreation() throws InterruptedException {
-        get("http://localhost/litecart/");
+        get(baseUrl);
 
         click(By.xpath("//form[@name='login_form']//a"));
 

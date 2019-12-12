@@ -11,9 +11,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.UUID;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class TestBase {
+    protected final String baseUrl = "http://localhost/litecart/";
+    protected final String adminPage = baseUrl + "admin/";
+    protected final String catalogPage = adminPage + "?app=catalog&doc=catalog";
+
     public WebDriver driver;
     public WebDriverWait wait;
 
@@ -46,6 +50,7 @@ public class TestBase {
     }
 
     protected void click(By locator) {
+        wait.until(visibilityOfElementLocated(locator));
         driver.findElement(locator).click();
     }
 
@@ -83,10 +88,21 @@ public class TestBase {
 
         if (text != null) {
             String exValue = driver.findElement(locator).getAttribute("value");
-            if (!exValue.equals(text)) {
+            if (!text.equals(exValue)) {
                 driver.findElement(locator).clear();
                 driver.findElement(locator).sendKeys(text);
             }
         }
+    }
+
+    protected void login() {
+        type(By.name("username"), "admin");
+        type(By.name("password"), "admin");
+
+        click(By.name("login"));
+
+        wait.until(titleContains("Cwark Store"));
+        wait.until(invisibilityOfElementLocated(By.xpath("//div[@id='notices-wrapper']//div[@class='notice success']")));
+        wait.until(invisibilityOfElementLocated(By.xpath("//div[@id='notices-wrapper']//div[@class='notice errors']")));
     }
 }

@@ -4,16 +4,56 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-public class TovarsTests extends TestBase {
-    private final String baseUrl = "http://localhost/litecart/";
-    private final String adminPage = baseUrl + "admin/";
+public class ProductTests extends TestBase {
 
     @Test
-    public void testTovarItems() {
+    public void testAddProduct() throws InterruptedException {
+        get(catalogPage);
+        login();
+
+        wait.until(visibilityOfElementLocated(By.xpath("//a[@class='button'][contains(text(),'Add New Product')]")));
+
+        click(By.xpath("//a[@class='button'][contains(text(),'Add New Product')]"));
+        wait.until(visibilityOfElementLocated(By.xpath("//h1")));
+        wait.until(visibilityOfElementLocated(By.xpath("//div[@id='tab-general']")));
+
+        Thread.sleep(500);
+        click(By.xpath("//div[@id='tab-general']//input[@name='status'][@value='1']"));
+        Thread.sleep(500);
+
+        type(By.xpath("//div[@id='tab-general']//input[@name='name[en]']"));
+        type(By.xpath("//div[@id='tab-general']//input[@name='code']"), getRandomNumberString());
+
+        click(By.xpath("//div[@class='tabs']//a[@href='#tab-information']"));
+        wait.until(visibilityOfElementLocated(By.xpath("//select[@name='manufacturer_id']")));
+
+        Select s = new Select(driver.findElement(By.xpath("//select[@name='manufacturer_id']")));
+        s.selectByValue("4");
+
+        Thread.sleep(500);
+
+        type(By.xpath("//div[@class='trumbowyg-editor']"));
+
+        click(By.xpath("//div[@class='tabs']//a[@href='#tab-prices']"));
+        wait.until(visibilityOfElementLocated(By.xpath("//select[@name='tax_class_id']")));
+
+        type(By.xpath("//div[@id='tab-prices']//input[@name='purchase_price']"), getRandomNumberString(2));
+
+        s = new Select(driver.findElement(By.xpath("//select[@name='purchase_price_currency_code']")));
+        s.selectByValue("EUR");
+
+        Thread.sleep(500);
+
+        click(By.xpath("//button[@name='save']"));
+    }
+
+    @Test
+    public void testProductItems() {
         get(baseUrl);
         wait.until(titleContains("Cwark Store"));
         wait.until(visibilityOfElementLocated(By.id("box-campaigns")));
@@ -75,8 +115,10 @@ public class TovarsTests extends TestBase {
         Assert.assertTrue(Integer.parseInt(arrayColor[0]) == Integer.parseInt(arrayColor[2]));
     }
 
-    private String[] getArrayColor(WebElement element){
+    private String[] getArrayColor(WebElement element) {
         String rgba = element.getCssValue("color");
         return rgba.substring(rgba.indexOf("(") + 1, rgba.indexOf(")")).split(", ");
     }
+
+
 }

@@ -7,32 +7,20 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class LitecartTests extends TestBase {
 
-    private final String baseUrl = "http://localhost/litecart/";
-    private final String adminPage = baseUrl + "admin/";
-
-
     @Test
     public void openAdminPageTest() {
         get(adminPage);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        click(By.name("login"));
-        wait.until(titleIs("Cwark Store"));
-
+        login();
     }
 
     @Test
     public void testLeftMenuItems() {
         get(adminPage);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        click(By.name("login"));
-        wait.until(titleIs("Cwark Store"));
+        login();
 
         List<WebElement> lis = driver.findElements(By.xpath("//li[@id='app-']/a/span[@class='name']"));
         List<String> liNames = new ArrayList<String>();

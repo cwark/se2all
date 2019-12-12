@@ -17,10 +17,7 @@ public class CountryTests extends TestBase {
     @Test
     public void testCountryAndZones() throws InterruptedException {
         get(adminPage);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        click(By.name("login"));
-        wait.until(titleIs("Cwark Store"));
+        login();
         wait.until(elementToBeClickable(By.xpath("//span[text()='Countries']/..")));
 
         Thread.sleep(3000);
@@ -68,10 +65,7 @@ public class CountryTests extends TestBase {
     @Test
     public void testGeoZones() throws InterruptedException {
         get(adminPage);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        click(By.name("login"));
-        wait.until(titleIs("Cwark Store"));
+        login();
         wait.until(elementToBeClickable(By.xpath("//span[text()='Geo Zones']/..")));
 
         Thread.sleep(3000);
