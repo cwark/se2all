@@ -2,11 +2,12 @@ package ru.cwark.selenium;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class ProductTests extends TestBase {
 
@@ -38,7 +39,7 @@ public class ProductTests extends TestBase {
         attachFile(By.xpath("//div[@id='tab-general']//input[@name='new_images[]']"), fName);
 
         click(By.xpath("//div[@class='tabs']//a[@href='#tab-information']"));
-        wait.until(visibilityOfElementLocated(By.xpath("//select[@name='manufacturer_id']")));
+        wait.until(presenceOfElementLocated(By.xpath("//select[@name='manufacturer_id']")));
 
         Select s = new Select(driver.findElement(By.xpath("//select[@name='manufacturer_id']")));
         s.selectByValue("4");
