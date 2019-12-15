@@ -2,8 +2,7 @@ package ru.cwark.selenium;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
@@ -26,8 +25,17 @@ public class ProductTests extends TestBase {
         click(By.xpath("//div[@id='tab-general']//input[@name='status'][@value='1']"));
         Thread.sleep(500);
 
-        type(By.xpath("//div[@id='tab-general']//input[@name='name[en]']"));
+        String productName = getRandomShortString();
+
+        type(By.xpath("//div[@id='tab-general']//input[@name='name[en]']"), productName);
         type(By.xpath("//div[@id='tab-general']//input[@name='code']"), getRandomNumberString());
+        type(By.xpath("//div[@id='tab-general']//input[@name='quantity']"), getRandomNumberString(2));
+
+        String gValue = "1-" + Long.toString(random(3, true));
+        click(By.xpath("//div[@id='tab-general']//input[@name='product_groups[]'][@value='" + gValue + "']"));
+
+        String fName = System.getProperty("user.dir") + "\\src\\resources\\133989045_0.jpg";
+        attachFile(By.xpath("//div[@id='tab-general']//input[@name='new_images[]']"), fName);
 
         click(By.xpath("//div[@class='tabs']//a[@href='#tab-information']"));
         wait.until(visibilityOfElementLocated(By.xpath("//select[@name='manufacturer_id']")));
@@ -50,6 +58,12 @@ public class ProductTests extends TestBase {
         Thread.sleep(500);
 
         click(By.xpath("//button[@name='save']"));
+        wait.until(visibilityOfElementLocated(By.xpath("//a[@class='button'][contains(text(),'Add New Product')]")));
+
+        Thread.sleep(500);
+
+        type(By.xpath("//form[@name='search_form']/input[@name='query']"), productName + Keys.ENTER);
+        wait.until(visibilityOfElementLocated(By.xpath("//form[@name='catalog_form']//a[contains(text(), '" + productName + "')]")));
     }
 
     @Test
