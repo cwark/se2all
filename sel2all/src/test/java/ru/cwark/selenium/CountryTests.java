@@ -5,8 +5,10 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
@@ -14,30 +16,51 @@ public class CountryTests extends TestBase {
     private final String baseUrl = "http://localhost/litecart/";
     private final String adminPage = baseUrl + "admin/";
 
-/*
-1) зайти в админку
-2) открыть пункт меню Countries (или страницу http://localhost/litecart/admin/?app=countries&doc=countries)
-3) открыть на редактирование какую-нибудь страну или начать создание новой
-4) возле некоторых полей есть ссылки с иконкой в виде квадратика со стрелкой -- они ведут на внешние страницы и открываются в новом окне, именно это и нужно проверить.
+    /*
+    1) зайти в админку
+    2) открыть пункт меню Countries (или страницу http://localhost/litecart/admin/?app=countries&doc=countries)
+    3) открыть на редактирование какую-нибудь страну или начать создание новой
+    4) возле некоторых полей есть ссылки с иконкой в виде квадратика со стрелкой -- они ведут на внешние страницы и открываются в новом окне, именно это и нужно проверить.
 
-Конечно, можно просто убедиться в том, что у ссылки есть атрибут target="_blank". Но в этом упражнении требуется именно кликнуть по ссылке, чтобы она открылась в новом окне, потом переключиться в новое окно, закрыть его, вернуться обратно, и повторить эти действия для всех таких ссылок.
+    Конечно, можно просто убедиться в том, что у ссылки есть атрибут target="_blank". Но в этом упражнении требуется именно кликнуть по ссылке, чтобы она открылась в новом окне, потом переключиться в новое окно, закрыть его, вернуться обратно, и повторить эти действия для всех таких ссылок.
 
-Не забудьте, что новое окно открывается не мгновенно, поэтому требуется ожидание открытия окна.
- */
+    Не забудьте, что новое окно открывается не мгновенно, поэтому требуется ожидание открытия окна.
+     */
     @Test
-    public void testCountryNewWindow() throws InterruptedException {
+    public void testCountryNewWindow() throws InterruptedException, MalformedURLException {
         get(countryPage);
         login();
 
         List<WebElement> list = driver.findElements(By.xpath("//form[@name='countries_form']//tr"));
-        WebElement tr = list.get((int)(random(list.size(), true)));
+        WebElement tr = list.get((int) (random(list.size(), true)));
         click(tr.findElement(By.xpath("//td[5]/a")));
 
         wait.until(visibilityOfElementLocated(By.xpath("//h1[contains(text(), 'Edit Country')]")));
         wait.until(titleContains("Edit Country"));
+        wait.until(presenceOfAllElementsLocatedBy(By.xpath("//form//a[@target='_blank']")));
+
+        String curWinHandle = driver.getWindowHandle();
+        Set<String> winHndls = driver.getWindowHandles();
+
+        list = driver.findElements(By.xpath("//form//a[@target='_blank']"));
+
+        for (WebElement element : list) {
+
+            Thread.sleep(500);
+            click(element);
+            String newWndHndl = wait.until(anyWindowOtherThan(winHndls));
+
+            Thread.sleep(500);
+
+            driver.switchTo().window(newWndHndl);
+
+            driver.close();
+            driver.switchTo().window(curWinHandle);
+        }
 
         Thread.sleep(10000);
     }
+
 
     @Test
     public void testCountryAndZones() throws InterruptedException {

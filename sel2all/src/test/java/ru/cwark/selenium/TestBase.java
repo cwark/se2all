@@ -11,8 +11,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
@@ -150,5 +152,15 @@ public class TestBase {
         WebElement input = driver.findElement(locator);
         unhide(input);
         input.sendKeys(file);
+    }
+
+    public ExpectedCondition<String> anyWindowOtherThan(Set<String> oldWindows) {
+        return new ExpectedCondition<String>() {
+            public String apply(WebDriver driver) {
+                Set<String> handles = driver.getWindowHandles();
+                handles.removeAll(oldWindows);
+                return handles.size() > 0 ? handles.iterator().next() : null;
+            }
+        };
     }
 }
