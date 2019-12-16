@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.UUID;
@@ -45,16 +47,19 @@ public class TestBase {
 
     @Before
     public void start() {
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "normal");
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
+        options.merge(capabilities);
         driver = new ChromeDriver(options);
 
         //driver = new FirefoxDriver();
         //driver = new InternetExplorerDriver();
 
 
-        wait = new WebDriverWait(driver, 30);
+        wait = new WebDriverWait(driver, 10);
     }
 
     @After
@@ -69,7 +74,12 @@ public class TestBase {
 
     protected void click(By locator) {
         wait.until(visibilityOfElementLocated(locator));
-        driver.findElement(locator).click();
+        wait.until(elementToBeClickable(locator));
+        click(driver.findElement(locator));
+    }
+
+    protected void click(WebElement element){
+        element.click();
     }
 
     protected String getRandomShortString(){
