@@ -21,6 +21,7 @@ public class TestBase {
     protected final String baseUrl = "http://localhost/litecart/";
     protected final String adminPage = baseUrl + "admin/";
     protected final String catalogPage = adminPage + "?app=catalog&doc=catalog";
+    protected final String countryPage = adminPage + "?app=countries&doc=countries";
 
     public WebDriver driver;
     public WebDriverWait wait;
@@ -59,7 +60,7 @@ public class TestBase {
         //driver = new InternetExplorerDriver();
 
 
-        wait = new WebDriverWait(driver, 10);
+        wait = new WebDriverWait(driver, 30);
     }
 
     @After
