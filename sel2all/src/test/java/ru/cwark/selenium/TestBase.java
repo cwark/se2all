@@ -11,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -25,7 +26,7 @@ public class TestBase {
     protected final String catalogPage = adminPage + "?app=catalog&doc=catalog";
     protected final String countryPage = adminPage + "?app=countries&doc=countries";
 
-    public WebDriver driver;
+    public EventFiringWebDriver driver;
     public WebDriverWait wait;
 
     public static long random(int upLevel, boolean noZero) {
@@ -56,8 +57,8 @@ public class TestBase {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         options.merge(capabilities);
-        driver = new ChromeDriver(options);
-
+        driver = new EventFiringWebDriver(new ChromeDriver(options));
+        driver.register(new TestListener());
         //driver = new FirefoxDriver();
         //driver = new InternetExplorerDriver();
 

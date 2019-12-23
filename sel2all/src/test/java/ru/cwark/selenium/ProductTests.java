@@ -5,11 +5,61 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class ProductTests extends TestBase {
+
+    @Test
+    public void testLogProductPage() throws InterruptedException {
+        get(catalogPage);
+        login();
+
+        // открываем все категории
+        By b = By.xpath("//table[@class='dataTable']//i[@class='fa fa-folder']/../a");
+        WebElement element = driver.findElement(b);
+        click(b);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(b));
+
+        while (isElementPresent(b)) {
+            WebElement tmpElement = driver.findElement(b);
+            click(b);
+        }
+
+        // получаем список всех товаров
+        List<String> listNames = new ArrayList<String>();
+        List<WebElement> list = driver.findElements(By.xpath("//table[@class='dataTable']//td[3]/a"));
+        for (WebElement item : list) {
+            listNames.add(item.getText());
+        }
+
+        // открываем товар
+        for (String name : listNames) {
+            click(By.xpath("//table[@class='dataTable']//td[3]/a[.='" + name + "']"));
+            wait.until(presenceOfElementLocated(By.xpath("//td[@id='content']//div[@class='tabs']")));
+            Thread.sleep(500);
+            List<LogEntry> lLogEntry = driver.manage().logs().get("browser").getAll();
+            if (lLogEntry.size() > 0) {
+                for (LogEntry logEntry : lLogEntry) {
+                    System.out.println(logEntry);
+                }
+            }
+
+            click(By.xpath("//button[@name='cancel']"));
+            wait.until(invisibilityOfElementLocated(By.xpath("//button[@name='cancel']")));
+            Thread.sleep(500);
+        }
+    }
+
+    private boolean isElementPresent(By xpath) {
+        return (driver.findElements(xpath).size() > 0);
+    }
 
     @Test
     public void testAddProduct() throws InterruptedException {
